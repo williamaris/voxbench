@@ -1,8 +1,6 @@
-from inspect import Attribute
 import os
 import shutil
 import zipfile
-import hashlib
 import requests
 from tqdm import tqdm
 from pathlib import Path
@@ -68,6 +66,7 @@ class Dataset:
 
     def export(self, dest_path):
         if (os.path.abspath(self.root) != os.path.abspath(dest_path)):
+            print(f"Exporting dataset to: {dest_path}...")
             shutil.copytree(self.root, dest_path)
 
     def _validate_integrity(self):
