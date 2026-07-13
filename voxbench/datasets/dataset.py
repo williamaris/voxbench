@@ -70,8 +70,6 @@ class Dataset:
             shutil.copytree(self.root, dest_path)
 
     def _validate_integrity(self):
-        print("Validating dataset integrity...")
-
         if not os.path.exists(self.root):
             print("Missing root.")
             return False

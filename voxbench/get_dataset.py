@@ -9,16 +9,16 @@ from voxbench.datasets.dataset import DATASET_REGISTRY
 parser = argparse.ArgumentParser()
 
 parser.add_argument(
-    '-n',
-    '--name',
+    '-d',
+    '--dataset',
     type = str,
     required = True,
     help = "Name of the dataset."
 )
 
 parser.add_argument(
-    '-d',
-    '--destination',
+    '-o',
+    '--output',
     type = str,
     required = True,
     help = "Output directory where the dataset will be copied to."
@@ -27,17 +27,16 @@ parser.add_argument(
 args = parser.parse_args()
 
 # Instantiate datatset
-args.name = args.name.strip()
+args.dataset = args.dataset.strip()
 
-if args.name not in DATASET_REGISTRY.keys():
-    raise KeyError(f"No dataset named '{args.name}' registered.")
+if args.dataset not in DATASET_REGISTRY.keys():
+    raise KeyError(f"No dataset named '{args.dataset}' registered.")
 
-dataset_cls = DATASET_REGISTRY[args.name]
-
+dataset_cls = DATASET_REGISTRY[args.dataset]
 dataset = dataset_cls()
 
 # Check output path
-output_path = os.path.join(args.destination, args.name)
+output_path = os.path.join(args.output, args.dataset)
 
 if os.path.exists(output_path):
     while True:
