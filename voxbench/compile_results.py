@@ -1,4 +1,3 @@
-import os
 import json
 import argparse
 
@@ -50,6 +49,7 @@ with open(args.input, 'r') as f:
 
 # Processing files
 results = {}
+dataset_name = None
 
 for model, benchmark_file in benchmark_files.items():
     # Load benchmark data
@@ -59,6 +59,13 @@ for model, benchmark_file in benchmark_files.items():
     # Add unknown metrics
     for k in data.keys():
         if k == "dataset":
+            if dataset_name is None:
+                dataset_name = data[k]
+
+            else:
+                if dataset_name != data[k]:
+                    raise ValueError("All benchmark files do not share same dataset.")
+
             continue
 
         if results.get(k) is None:
@@ -74,22 +81,40 @@ for model, benchmark_file in benchmark_files.items():
         p_mean = data[k]["processed_mean"]
         p_std = data[k]["processed_std"]
 
-        results[k]["noisy"] = f"{n_mean:0.4f}"
+        results[k]["noisy"] = f"{n_mean:.{args.precision}f}"
 
         if not args.omit_sd:
-            results[k]["noisy"] += f" ± {n_std:0.4f}"
+            results[k]["noisy"] += f" ± {n_std:.{args.precision}f}"
 
-        results[k][model] = f"{p_mean:0.4f}"
+        results[k][model] = f"{p_mean:.{args.precision}f}"
 
         if not args.omit_sd:
-            results[k][model] += f" ± {p_std:0.4f}"
+            results[k][model] += f" ± {p_std:.{args.precision}f}"
 
 # Generate table
 metrics = list(results.keys())
-rows = ["noisy"] + list(benchmark_files.keys())
+models = ["noisy"] + list(benchmark_files.keys())
 
 if args.format == "markdown":
-    raise NotImplementedError()
+    markdown_lines = []
+    markdown_lines.append("| Model | " + " | ".join([m.upper() for m in metrics]) + " |")
+    markdown_lines.append("| :--- | " + " | ".join(["---"] * len(metrics)) + " |")
+
+    for model in models:
+        if model == "noisy":
+            row_cells = [model.capitalize()]
+        else:
+            row_cells = [model]
+
+        for metric in metrics:
+            val = results[metric].get(model, "-")
+            row_cells.append(val)
+
+        markdown_lines.append("| " + " | ".join(row_cells) + " |")
+
+    markdown_table = "\n".join(markdown_lines)
+
+    print(markdown_table)
 
 elif args.format == "latex":
     raise NotImplementedError()

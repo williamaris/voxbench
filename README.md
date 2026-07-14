@@ -20,6 +20,16 @@ python -m voxbench.evaluate --dataset <dataset_name> --input <processed_audio_di
 
 Compile results into a table:
 
+1. Create list file containing the name of the models and the path to their benchmark results. For example:
+
 ```bash
-python -m voxbench.compile_results --input <list_file> --format <markdown || latex || csv> (--omit_sd)
+Model 1 : ~/model_1/voxbench/voicebank_demand/voxbench_results.json
+Model 2 : ~/model_2/voxbench/voicebank_demand/voxbench_results.json
+Model 3 : ~/model_3/voxbench/voicebank_demand/voxbench_results.json
+```
+
+2. Enter command in terminal:
+
+```bash
+python -m voxbench.compile_results --input <list_file> --format <markdown || latex || csv> (--precision <n_decimals>) (--omit_sd)
 ```
