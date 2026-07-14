@@ -21,9 +21,5 @@ python -m voxbench.evaluate --dataset <dataset_name> --input <processed_audio_di
 Compile results into a table:
 
 ```bash
-python -m voxbench.compile_results --input <list_file> --format <markdown || latex || csv>
+python -m voxbench.compile_results --input <list_file> --format <markdown || latex || csv> (--omit_sd)
 ```
-
-optional 
-- ```--precision <n_of_decimals>```
-- ```--no_sd```
