@@ -1,6 +1,12 @@
 # VoxBench
 
-Get a copy of the dataset:
+List available datasets:
+
+```bash
+python -m voxbench.list_datasets
+```
+
+Get a copy of a dataset:
 
 ```bash
 python -m voxbench.get_dataset --dataset <dataset_name> --output <output_dir>
