@@ -33,3 +33,7 @@ Model 3 : ~/model_3/voxbench/voicebank_demand/voxbench_results.json
 ```bash
 python -m voxbench.compile_results --input <list_file> --format <markdown || latex || csv> (--precision <n_decimals>) (--omit_sd)
 ```
+
+### Roadmap
+
+- Add https://audatic-team.github.io/WHAMVox/
