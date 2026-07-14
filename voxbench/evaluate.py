@@ -103,12 +103,12 @@ for filename, xs_data, ss_data in tqdm(dataset, desc = "Benchmarking"):
 
     log_result('si-sdr', noisy_si_sdr, processed_si_sdr)
 
-    #noisy_csig, noisy_cbak, noisy_covl = m.compute_composite(xs, ss, fs)
-    #processed_csig, processed_cbak, processed_covl = m.compute_composite(ys, ss, fs)
+    noisy_csig, noisy_cbak, noisy_covl = m.compute_composite(xs, ss, fs)
+    processed_csig, processed_cbak, processed_covl = m.compute_composite(ys, ss, fs)
 
-    #log_result('csig', noisy_csig, processed_csig)
-    #log_result('cbak', noisy_cbak, processed_cbak)
-    #log_result('covl', noisy_covl, processed_covl)
+    log_result('csig', noisy_csig, processed_csig)
+    log_result('cbak', noisy_cbak, processed_cbak)
+    log_result('covl', noisy_covl, processed_covl)
 
 # Compiling final results
 summary = "="*61
