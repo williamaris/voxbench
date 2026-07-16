@@ -1,7 +1,5 @@
 import os
-import sys
 import json
-import shutil
 import argparse
 import numpy as np
 from tqdm import tqdm
@@ -80,7 +78,38 @@ for filename, xs_data, ss_data in tqdm(dataset, desc = "Benchmarking"):
     ss, ss_fs = ss_data
     ys, ys_fs = ys_data
 
-    fs = xs_fs
+    fs = ys_fs
+
+    # Resampling labels if needed
+    if xs_fs != fs:
+        xs = utils.resample_signal(xs, xs_fs, fs)
+        xs_fs = fs
+
+    if ss_fs != fs:
+        ss = utils.resample_signal(ss, ss_fs, fs)
+        ss_fs = fs
+
+    # Realign signal
+    ss_norm = np.mean((ss - np.mean(ss)) / np.std(ss), axis = 0)
+    ys_norm = np.mean((ys - np.mean(ys)) / np.std(ys), axis = 0)
+
+    corr = np.correlate(ss_norm, ys_norm, mode = 'full')
+    lag_idx = np.argmax(corr)
+
+    shift = lag_idx - (ys.shape[-1] - 1)
+
+    aligned_ys = np.zeros_like(ss)
+
+    ys_start = max(0, -shift)
+    ys_end = min(ys.shape[-1], ss.shape[-1] - shift)
+
+    ss_start = max(0, shift)
+    ss_end = min(ss.shape[-1], shift + ys.shape[-1])
+
+    if ys_start < ys_end and ss_start < ss_end:
+        aligned_ys[:, ss_start:ss_end] = ys[:, ys_start:ys_end]
+
+    ys = aligned_ys
 
     # Computing metrics
     noisy_pesq = m.compute_pesq(xs, ss, fs)
