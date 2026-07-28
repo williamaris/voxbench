@@ -10,9 +10,9 @@ from voxbench.datasets.dataset import Dataset, register_dataset
 
 
 @register_dataset
-class EARSWhamReSpeaker(Dataset):
+class EARS2t4MixReSpeaker(Dataset):
 
-    name = "ears_wham_respeaker"
+    name = "ears_2t4mix_respeaker"
 
     def __init__(self):
         super().__init__(self.name)
@@ -53,7 +53,7 @@ class EARSWhamReSpeaker(Dataset):
         clean_speech_file += ".zip"
 
         hf.snapshot_download(
-            repo_id = "williamaris/ears_wham_respeaker",
+            repo_id = "williamaris/ears_2t4mix_respeaker",
             repo_type = "dataset",
             local_dir = self.root,
             allow_patterns=[

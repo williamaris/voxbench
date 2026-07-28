@@ -1,4 +1,5 @@
 import numpy as np
+from pick import pick
 from typing import Tuple
 from scipy.io import wavfile
 from fractions import Fraction
@@ -66,3 +67,8 @@ def resample_signal(xs : np.ndarray, fs_in : int, fs_out : int) -> np.ndarray:
         down = ratio.denominator,
         axis = -1
     )
+
+
+def selection_prompt(prompt, options, default = 0):
+    option, index = pick(options, prompt, indicator="=>", default_index = default)
+    return option, index
